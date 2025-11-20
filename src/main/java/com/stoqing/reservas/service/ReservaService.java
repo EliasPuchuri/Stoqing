@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -44,6 +45,10 @@ public class ReservaService {
     // Listar tarjetas DTO del dashboard
     public List<CardSoliDTO> listarCardSolicitud(){
         return reservaRepo.listarCardSolicitud();
+    }
+
+    public Optional<Reserva> findById(Integer id){
+        return reservaRepo.findById(id);
     }
 
     public PanelAdminDashDTO listarContadoresDashboard(LocalDate fecha){
@@ -79,20 +84,13 @@ public class ReservaService {
         reservaRepo.actualizarEstadoReserva(idEstado, idReserva);
     }
 
-    public void aceptarSolicitudReserva(AceptarSolicitudDTO acepSoliDTO) throws MessagingException {
+    public void aceptarSolicitudReserva(AceptarSolicitudDTO acepSoliDTO, int id) throws MessagingException {
         Reserva reserva = reservaRepo.findById(acepSoliDTO.getIdReserva())
             .orElseThrow(() -> new RuntimeException("Reserva no encontrada"));
 
+
         reserva.setExpira(null);
+        reservaRepo.asignarMesa(reserva.getId(), id, reserva.getNumeroPersonas());
         reservaRepo.aceptarSolicitudReserva(acepSoliDTO);
-        mailService.sendMail(new EmailDTO(reserva.getEmailContacto(), "Confirmacion de reserva", "xd", reserva));
-        whatsAppService.confirmacionMensaje(reserva.getTelCliente(), "Reserva confirmada\n" +
-            "- Código de reserva: " + reserva.getCodigo() + "\n" +
-            "- Fecha: " + reserva.getFechaReserva() + "\n" +
-            "- Hora: " + reserva.getHoraReserva() + "\n" +
-            "- Número de personas: " + reserva.getNumeroPersonas() + "\n" +
-            "- Monto de garantía: " + reserva.getMontoGarantia() + "\n" +
-            "- Método de pago utilizado: " + acepSoliDTO.getMetodoPago().toString().toLowerCase() + "\n" +
-            "Lo esperamos!");
     }
 }
