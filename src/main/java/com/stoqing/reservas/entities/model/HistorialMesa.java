@@ -39,7 +39,4 @@ public class HistorialMesa {
 
     @Column(nullable=false)
     private LocalTime hora_actualizacion;
-
-    private String observaciones;
-
 }

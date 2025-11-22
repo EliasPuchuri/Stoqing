@@ -39,7 +39,13 @@ public interface ReservaRepository extends JpaRepository<Reserva, Integer> {
 
     @Transactional
     @Modifying
-    @Query("update Reserva r set r.estado.id = :#{#as.idEstado}, r.metodoPago = :#{#as.metodoPago} where r.id = :#{#as.idReserva}")
+    @Query(
+        "update Reserva r set " +
+            "r.estado.id = :#{#as.idEstado}, " +
+            "r.expira = null, " +
+            "r.audit.modifiedBy= :#{#as.idOperario}, " +
+            "r.metodoPago = :#{#as.metodoPago} " +
+        "where r.id = :#{#as.idReserva}")
     void aceptarSolicitudReserva(@Param("as") AceptarSolicitudDTO acepSoliDTO);
 
     @Query("select r.estado.id from Reserva as r where r.fechaReserva = ?1")

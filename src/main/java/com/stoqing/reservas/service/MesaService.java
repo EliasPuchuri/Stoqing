@@ -1,11 +1,13 @@
 package com.stoqing.reservas.service;
 
+import com.stoqing.reservas.config.UserDetailsCustom;
 import com.stoqing.reservas.entities.emuns.TipoEstado;
 import com.stoqing.reservas.entities.model.Estado;
 import com.stoqing.reservas.entities.model.Mesa;
 import com.stoqing.reservas.repository.EstadoRepository;
 import com.stoqing.reservas.repository.MesaRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +24,10 @@ public class MesaService {
     }
 
     public Mesa cambiarEstadoMesa(int numMesa, String nombreEstado) {
+
+        UserDetailsCustom sessionUser =
+            (UserDetailsCustom) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         Mesa mesa = mesaRepository.findById(numMesa)
             .orElseThrow(() -> new IllegalArgumentException("Mesa no encontrada: " + numMesa));
 
@@ -30,6 +36,7 @@ public class MesaService {
             .orElseThrow(() -> new IllegalArgumentException("Estado MESA no encontrado: " + nombreEstado));
 
         mesa.setEstado(estado);
+        mesa.getAudit().setModifiedBy(sessionUser.getOperario().getId());
         return mesaRepository.save(mesa);
     }
 }

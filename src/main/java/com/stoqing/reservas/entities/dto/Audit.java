@@ -23,7 +23,7 @@ public class Audit{
     private LocalDateTime deletedAt;
 
     @Column(name="modified_by")
-    private Long modifiedBy;
+    private Integer modifiedBy;
 
     @PrePersist
     public void prePersist() {

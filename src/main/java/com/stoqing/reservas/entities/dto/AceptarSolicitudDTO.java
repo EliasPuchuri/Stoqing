@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class AceptarSolicitudDTO {
     Integer idEstado;
+    Integer idOperario;
     Integer idReserva;
 
     @Enumerated(EnumType.STRING)

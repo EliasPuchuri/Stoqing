@@ -1,5 +1,6 @@
 package com.stoqing.reservas.service;
 
+import com.stoqing.reservas.config.UserDetailsCustom;
 import com.stoqing.reservas.entities.dto.AceptarSolicitudDTO;
 import com.stoqing.reservas.entities.dto.CardSoliDTO;
 import com.stoqing.reservas.entities.dto.PanelAdminDashDTO;
@@ -9,6 +10,7 @@ import com.stoqing.reservas.repository.ReservaRepository;
 import com.stoqing.reservas.utils.EstadosReserva;
 import jakarta.mail.MessagingException;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -37,7 +39,7 @@ public class ReservaService {
 
     public void save(Reserva reserva){
         LocalDateTime actual = LocalDateTime.now(ZoneId.of("America/Lima"));
-        reserva.setExpira(actual.plusMinutes(15L));
+        reserva.setExpira(actual.plusSeconds(15L));
         reservaRepo.save(reserva);
         reservaRepo.asignarMesa(reserva.getCodigo(), reserva.getNumeroPersonas());
     }
@@ -77,19 +79,18 @@ public class ReservaService {
     }
 
     public void actualizarEstadoReserva(Integer idEstado, Integer idReserva){
+        UserDetailsCustom user =
+            (UserDetailsCustom) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         Reserva reserva = reservaRepo.findById(idReserva)
             .orElseThrow(() -> new RuntimeException("Reserva no encontrada"));
 
         reserva.setExpira(null);
+        reserva.getAudit().setModifiedBy(user.getOperario().getId());
         reservaRepo.actualizarEstadoReserva(idEstado, idReserva);
     }
 
-    public void aceptarSolicitudReserva(AceptarSolicitudDTO acepSoliDTO, int id) throws MessagingException {
-        Reserva reserva = reservaRepo.findById(acepSoliDTO.getIdReserva())
-            .orElseThrow(() -> new RuntimeException("Reserva no encontrada"));
-
-
-        reserva.setExpira(null);
+    public void aceptarSolicitudReserva(AceptarSolicitudDTO acepSoliDTO) throws MessagingException {
         reservaRepo.aceptarSolicitudReserva(acepSoliDTO);
     }
 }

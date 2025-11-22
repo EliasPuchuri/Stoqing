@@ -21,7 +21,7 @@ public class ReservaScheduled {
     private ReservaRepository reservaRepo;
     private EstadoRepository estadoRepo;
 
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = 5000)
     @Transactional
     public void cancelarReservaNoPagada(){
         LocalDateTime actual = LocalDateTime.now(ZoneId.of("America/Lima"));
@@ -38,6 +38,7 @@ public class ReservaScheduled {
         expiradas.forEach(reserva -> {
             reserva.setEstado(cancelado);
             reserva.setExpira(null);
+            reserva.getAudit().setDeletedAt(actual);
         });
     }
 

@@ -61,10 +61,12 @@ public class ReservaRestController {
         UserDetailsCustom sessionUser =
             (UserDetailsCustom) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
+        acepSoliDto.setIdOperario(sessionUser.getOperario().getId());
+
         Reserva reserva = reservaService.findById(id_reserva)
             .orElseThrow(() -> new RuntimeException("Reserva no encontrada"));
 
-        reservaService.aceptarSolicitudReserva(acepSoliDto, sessionUser.getOperario().getId());
+        reservaService.aceptarSolicitudReserva(acepSoliDto);
         mailService.sendMail(new EmailDTO(reserva.getEmailContacto(), "Confirmacion de reserva", "xd", reserva));
         whatsAppService.confirmacionMensaje(reserva.getTelCliente(), "Reserva confirmada\n" +
             "- Código de reserva: " + reserva.getCodigo() + "\n" +

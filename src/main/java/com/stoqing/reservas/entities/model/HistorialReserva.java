@@ -40,7 +40,4 @@ public class HistorialReserva {
     @Column(nullable=false)
     private LocalTime hora_actualizacion;
 
-    private String observaciones;
-
-
 }
