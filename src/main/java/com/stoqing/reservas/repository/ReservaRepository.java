@@ -45,10 +45,9 @@ public interface ReservaRepository extends JpaRepository<Reserva, Integer> {
     @Query("select r.estado.id from Reserva as r where r.fechaReserva = ?1")
     List<Integer> ids_estado(LocalDate fechaReserva);
 
-    @Procedure("sp_asignar_mesa")
+    @Procedure("sp_asignar_mesa_auto")
     void asignarMesa(
-        @Param("p_id_reserva") int idReserva,
-        @Param("p_id_operario") int idOperario,
+        @Param("p_codigo") String p_codigo,
         @Param("p_numero_personas") int numPersonas
     );
 }

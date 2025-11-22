@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalTime;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -25,6 +27,8 @@ public class Mesa {
     @NotNull
     @Enumerated(EnumType.STRING)
     public CapacidadMesa capacidad;
+
+    public LocalTime fecha;
 
     @Embedded
     private Audit audit = new Audit();

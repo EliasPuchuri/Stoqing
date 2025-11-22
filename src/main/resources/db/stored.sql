@@ -1,8 +1,7 @@
 DELIMITER $$
-
+# drop procedure sp_asignar_mesa
 CREATE PROCEDURE sp_asignar_mesa(
     IN p_id_reserva INT,
-    IN p_id_operario INT,
     IN p_numero_personas INT
 )
 BEGIN
@@ -33,6 +32,12 @@ BEGIN
 
     -- Si encontramos mesa, actualizarla
     IF v_num_mesa IS NOT NULL THEN
+        UPDATE mesa
+        SET id_estado = 10,
+            updated_at = NOW(),
+            modified_by = 1
+        WHERE num_mesa = v_num_mesa;
+
         -- Crear registro en asignacion_mesa
         INSERT INTO asignacion_mesa (
             num_mesa,
@@ -40,15 +45,17 @@ BEGIN
             id_reserva,
             fecha_asignacion,
             created_at,
-            updated_at
+            updated_at,
+            modified_by
         )
         SELECT
             v_num_mesa,
-            p_id_operario,
+            1,
             p_id_reserva,
             NOW(),
             NOW(),
-            NOW()
+            NOW(),
+            1
         FROM reserva r
         WHERE r.id_reserva = p_id_reserva;
     ELSE

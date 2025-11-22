@@ -2,7 +2,6 @@ package com.stoqing.reservas.service;
 
 import com.stoqing.reservas.entities.dto.AceptarSolicitudDTO;
 import com.stoqing.reservas.entities.dto.CardSoliDTO;
-import com.stoqing.reservas.entities.dto.EmailDTO;
 import com.stoqing.reservas.entities.dto.PanelAdminDashDTO;
 import com.stoqing.reservas.entities.model.Reserva;
 import com.stoqing.reservas.repository.EstadoRepository;
@@ -40,6 +39,7 @@ public class ReservaService {
         LocalDateTime actual = LocalDateTime.now(ZoneId.of("America/Lima"));
         reserva.setExpira(actual.plusMinutes(15L));
         reservaRepo.save(reserva);
+        reservaRepo.asignarMesa(reserva.getCodigo(), reserva.getNumeroPersonas());
     }
 
     // Listar tarjetas DTO del dashboard
@@ -90,7 +90,6 @@ public class ReservaService {
 
 
         reserva.setExpira(null);
-        reservaRepo.asignarMesa(reserva.getId(), id, reserva.getNumeroPersonas());
         reservaRepo.aceptarSolicitudReserva(acepSoliDTO);
     }
 }

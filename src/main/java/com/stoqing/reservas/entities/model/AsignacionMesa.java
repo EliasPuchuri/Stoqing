@@ -36,11 +36,14 @@ public class AsignacionMesa {
     @Column(name = "fecha_asignacion", nullable = false)
     private LocalDate fechaAsignacion = LocalDate.now();
 
-    @Column(name = "hora_inicio", nullable = false)
-    private LocalTime horaInicio = LocalTime.now();
+    @Column(name = "hora_inicio",  nullable = false)
+    private LocalTime horaInicio;
 
-    @Column(name = "hora_fin", nullable = true)
+    @Column(name = "hora_fin")
     private LocalTime horaFin;
+
+    @Column(nullable = false)
+    private LocalTime expira;
 
     @Embedded
     private Audit audit = new Audit();

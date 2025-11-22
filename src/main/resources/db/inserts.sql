@@ -1,3 +1,11 @@
+create database reservas;
+# drop database reservas;
+
+
+set global event_scheduler = on;
+set global time_zone = '-05:00';
+
+
 insert into operario(nombre, apellido, dni, contrasena, telefono, enabled, created_at)
 values ('Claudia', 'Marrujo', '87654321', '$2a$12$WoVSjatLgyYTTPe.c3nkKOSReU87wUumvf2zgRWWoOwQQySiSPNmK','977174726', 1, now()),
 ('Alejandro', 'Tineo', '72844354', '$2a$12$EXcZnwGexsTOfVdVUHYhAOloRFxUcug1CP7zBjIIOZZjrhLil4Xpm','961654036', 1, now()),
@@ -27,25 +35,26 @@ VALUES
 -- MESAS
 
 INSERT INTO mesa (num_mesa, id_estado, capacidad, created_at) VALUES
-                                                      -- Mesas para 2 personas
-                                                      (1, 6, 'DOS', now()),
-                                                      (2, 6, 'DOS', now()),
-                                                      (3, 6, 'DOS', now()),
-                                                      (4, 6, 'DOS', now()),
+    -- Mesas para 2 personas
+    (1, 9, 'DOS', now()),
+    (2, 9, 'DOS', now()),
+    (3, 9, 'DOS', now()),
+    (4, 9, 'DOS', now()),
 
-                                                      -- Mesas para 4 personas
-                                                      (5, 6, 'CUATRO', now()),
-                                                      (6, 6, 'CUATRO', now()),
-                                                      (7, 6, 'CUATRO', now()),
-                                                      (8, 6, 'CUATRO', now()),
-                                                      (9, 6, 'CUATRO', now()),
+    -- Mesas para 4 personas
+    (5, 9, 'CUATRO', now()),
+    (6, 9, 'CUATRO', now()),
+    (7, 9, 'CUATRO', now()),
+    (8, 9, 'CUATRO', now()),
+    (9, 9, 'CUATRO', now()),
 
-                                                      -- Mesas para 6 personas
-                                                      (10, 6, 'SEIS', now()),
-                                                      (11, 6, 'SEIS', now()),
-                                                      (12, 6, 'SEIS', now()),
-                                                      (13, 6, 'SEIS', now()),
+    -- Mesas para 6 personas
+    (10, 9, 'SEIS', now()),
+    (11, 9, 'SEIS', now()),
+    (12, 9, 'SEIS', now()),
+    (13, 9, 'SEIS', now()),
 
-                                                      -- Mesas para 8 personas
-                                                      (14, 6, 'OCHO', now()),
-                                                      (15, 6, 'OCHO', now());
+    -- Mesas para 8 personas
+    (14, 9, 'OCHO', now()),
+    (15, 9, 'OCHO', now());
+
