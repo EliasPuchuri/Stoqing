@@ -1,0 +1,103 @@
+<div id="reservasDelDia" class="mesas-layout__reservas-list" th:fragment="cardRes(reservas)">
+
+    <!-- Estado vacío -->
+    <div th:if="${reservas == null or #lists.isEmpty(reservas)}"
+         class="empty-state">
+        No hay reservas para
+        <span th:text="${#temporals.format(hoy, 'dd/MM/yyyy')}">hoy</span>.
+    </div>
+
+    <!-- Lista de reservas -->
+    <div th:each="reserva : ${reservas}">
+
+        <div class="reserva-item">
+            <!-- Línea superior: código, nombre, badge estado -->
+            <div>
+                <strong th:text="${reserva.codigo}">RXXXXXX</strong>
+                <span> - </span>
+                <span th:text="${reserva.nombreCliente + ' ' + reserva.apellidoCliente}">
+                    Nombre Apellido
+                </span>
+                <span class="reserva-status"
+                      th:classappend="' ' + ${statusClass}"
+                      th:text="${reserva.estado.nombre}">
+                    Estado
+                </span>
+            </div>
+
+            <!-- Línea info secundaria -->
+            <div class="small-muted">
+                <!-- Hora -->
+                <span th:text="${#temporals.format(reserva.horaReserva, 'hh:mm a')}">15:00</span>
+                <span> | </span>
+
+                <!-- Número de personas -->
+                <span th:text="${reserva.numeroPersonas}">2</span>
+                <span> persona(s) | Mesa </span>
+
+                <span> | </span>
+                <!-- Teléfono -->
+                <span th:text="${reserva.telCliente}">999999999</span>
+            </div>
+
+            <!-- Botones de acción -->
+            <div style="margin-top:8px">
+
+                <!-- Pago pendiente (id_estado = 1) -->
+                <button class="btn btn-sm btn-success"
+                        type="button"
+                        th:if="${reserva.estado.id == 1}"
+                        th:onclick="'confirmarPago(' + ${reserva.id} + ')'">
+                    Confirmar pago
+                </button>
+
+                <button class="btn btn-sm btn-danger"
+                        type="button"
+                        th:if="${reserva.estado.id == 1}"
+                        th:onclick="'denegarSolicitud(' + ${reserva.id} + ')'">
+                    Denegar
+                </button>
+
+                <!-- Programada (id_estado = 2) -->
+                <button class="btn btn-sm btn-outline-primary"
+                        type="button"
+                        th:if="${reserva.estado.id == 2}"
+                        th:onclick="'openEditModal(' + ${reserva.id} + ')'">
+                    Editar
+                </button>
+
+                <button class="btn btn-sm btn-success"
+                        type="button"
+                        th:if="${reserva.estado.id == 2}"
+                        th:onclick="'iniciarReserva(' + ${reserva.id} + ')'">
+                    Iniciar
+                </button>
+
+                <!-- En curso (id_estado = 6) -->
+                <button class="btn btn-sm btn-primary"
+                        type="button"
+                        th:if="${reserva.estado.id == 6}"
+                        th:onclick="'finalizarReserva(' + ${reserva.id} + ')'">
+                    Finalizar
+                </button>
+
+                <!-- Cancelar (visible mientras NO esté finalizada ni cancelada) -->
+                <button class="btn btn-sm btn-outline-danger"
+                        type="button"
+                        th:if="${!(reserva.estado.id == 7 or reserva.estado.id == 3 or reserva.estado.id == 4 or reserva.estado.id == 5 or reserva.estado.id == 8)}"
+                        th:onclick="'cancelReserva(' + ${reserva.id} + ')'">
+                    Cancelar
+                </button>
+
+                <!-- Ver detalles SIEMPRE -->
+                <button class="btn btn-sm btn-outline-dark"
+                        type="button"
+                        th:onclick="'viewReservaDetails(' + ${reserva.id} + ')'">
+                    Ver detalles
+                </button>
+            </div>
+        </div>
+
+    </div> <!-- fin th:each -->
+
+</div>

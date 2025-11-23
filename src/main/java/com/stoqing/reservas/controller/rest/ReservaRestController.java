@@ -55,6 +55,7 @@ public class ReservaRestController {
     @PostMapping("/crear")
     public ResponseEntity<?> crear(@RequestBody Reserva reserva){
         reservaService.save(reserva);
+        reserva.getAudit().setModifiedBy(1);
         return ResponseEntity.status(HttpStatus.CREATED).body(reserva);
     }
 
@@ -78,7 +79,10 @@ public class ReservaRestController {
             .orElseThrow(() -> new RuntimeException("Reserva no encontrada"));
 
         reservaService.aceptarSolicitudReserva(acepSoliDto);
+
         mailService.sendMail(new EmailDTO(reserva.getEmailContacto(), "Confirmacion de reserva", "xd", reserva));
+
+
         whatsAppService.confirmacionMensaje(reserva.getTelCliente(), "Reserva confirmada\n" +
             "- Código de reserva: " + reserva.getCodigo() + "\n" +
             "- Fecha: " + reserva.getFechaReserva() + "\n" +

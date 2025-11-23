@@ -40,6 +40,7 @@ public class ReservaScheduled {
             reserva.setEstado(cancelado);
             reserva.setExpira(null);
             reserva.getAudit().setDeletedAt(actual);
+            reserva.getAudit().setModifiedBy(1);
         });
     }
 

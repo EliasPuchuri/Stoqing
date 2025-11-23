@@ -38,6 +38,10 @@ public class ReservaService {
         return reservaRepo.findByEstado_Id(id);
     }
 
+    public List<Reserva> findByFechaReserva(LocalDate fecha){
+        return reservaRepo.findByFechaReserva(fecha);
+    }
+
     public void save(Reserva reserva){
         LocalDateTime actual = LocalDateTime.now(ZoneId.of("America/Lima"));
         reserva.setExpira(actual.plusSeconds(15L)); // cambiar a .plusMinutes(15L)
@@ -80,14 +84,27 @@ public class ReservaService {
     }
 
     public void actualizarEstadoReserva(Integer idEstado, Integer idReserva){
+        LocalDateTime actual = LocalDateTime.now(ZoneId.of("America/Lima"));
+
         UserDetailsCustom user =
             (UserDetailsCustom) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         Reserva reserva = reservaRepo.findById(idReserva)
             .orElseThrow(() -> new RuntimeException("Reserva no encontrada"));
 
+        if (
+            idEstado.equals(EstadosReserva.CANCELADO_EXPIRADO) ||
+            idEstado.equals(EstadosReserva.CANCELADO_INCONVENIENTES) ||
+            idEstado.equals(EstadosReserva.CANCELADO_NO_SHOW) ||
+            idEstado.equals(EstadosReserva.CANCELADO_CLIENTE) ||
+            idEstado.equals(EstadosReserva.FINALIZADA)
+        ){
+            reserva.getAudit().setDeletedAt(actual);
+        }
+
         reserva.setExpira(null);
         reserva.getAudit().setModifiedBy(user.getOperario().getId());
+
         reservaRepo.actualizarEstadoReserva(idEstado, idReserva);
     }
 

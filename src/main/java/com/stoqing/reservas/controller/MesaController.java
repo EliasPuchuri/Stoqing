@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDate;
-import java.util.TimeZone;
 
 @Controller
 @AllArgsConstructor
@@ -20,7 +19,7 @@ public class MesaController {
     public String mesas(Model model) {
         LocalDate hoy = LocalDate.now();
 
-        model.addAttribute("reservas", reservaRepo.findByEstado_IdAndFechaReserva(2, hoy));
+        model.addAttribute("reservas", reservaRepo.findByFechaReserva(hoy));
 
         return "pages/mesas";
     }

@@ -20,6 +20,10 @@ public interface ReservaRepository extends JpaRepository<Reserva, Integer> {
 
     List<Reserva> findByEstado_IdAndExpiraBefore(Integer id, LocalDateTime actual);
 
+    List<Reserva> findByEstado_IdAndFechaReserva(int id_estado, LocalDate fechaReserva);
+
+    List<Reserva> findByFechaReserva(LocalDate fechaReserva);
+
     @Query("select new com.stoqing.reservas.entities.dto.CardSoliDTO(" +
         "r.id, " +
         "r.codigo, " +
@@ -57,5 +61,4 @@ public interface ReservaRepository extends JpaRepository<Reserva, Integer> {
         @Param("p_numero_personas") int numPersonas
     );
 
-    List<Reserva> findByEstado_IdAndFechaReserva(int id_estado, LocalDate fechaReserva);
 }
