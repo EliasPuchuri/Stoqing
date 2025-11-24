@@ -134,8 +134,8 @@ public class ReservaRestController {
                 id_estado.equals(EstadosReserva.FINALIZADA)
         ){
             reserva.getAudit().setDeletedAt(actual);
-        } else if (id_estado.equals(EstadosReserva.EN_CURSO)){
-            mesaService.cambiarEstadoMesa(mesa.getId(), id_estado);
+        } else if (id_estado.equals(EstadosReserva.EN_CURSO)) {
+            mesaService.cambiarEstadoMesa(mesa.getId(), 12);
         }
 
         reserva.setExpira(null);
